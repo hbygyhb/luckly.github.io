@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>荷塘动物乐园</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB 0%, #98FB98 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #2E8B57;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .pond-container {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            height: 500px;
+            margin: 0 auto;
+            background: linear-gradient(to bottom, #87CEEB 0%, #4682B4 50%, #2E8B57 100%);
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .water {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to bottom, rgba(135, 206, 235, 0.7), rgba(70, 130, 180, 0.9));
+            z-index: 1; /* 水面在最底层 */
+        }
+
+        .lily-pad {
+            position: absolute;
+            width: 120px;
+            height: 100px;
+            background: #32CD32;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 5; /* 荷叶在中间层 */
+        }
+
+        .lily-pad:hover {
+            transform: scale(1.1);
+        }
+
+        .lily-pad.top {
+            top: 20%;
+        }
+
+        .lily-pad.bottom {
+            bottom: 10%;
+        }
+
+        .animal-display {
+            position: absolute;
+            font-size: 5em;
+            transition: all 0.5s ease;
+            z-index: 20; /* 动物在最上层，确保不被遮挡 */
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 20px auto;
+        }
+
+        .animal-btn {
+            padding: 15px 25px;
+            font-size: 1.2em;
+            background: linear-gradient(145deg, #ff9a9e, #fecfef);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: #333;
+            font-weight: bold;
+        }
+
+        .animal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .animal-btn:active {
+            transform: translateY(0);
+        }
+
+        .instruction {
+            text-align: center;
+            font-size: 1.3em;
+            color: #2E8B57;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌿 荷塘动物乐园 🌿</h1>
+    </div>
+
+    <div class="instruction">
+        点击下面的动物名称，看看它们在荷塘里做什么！
+    </div>
+
+    <div class="pond-container">
+        <div class="water"></div>
+        
+        <!-- 荷叶位置 -->
+        <div class="lily-pad top" style="left: 20%;">🍃</div>
+        <div class="lily-pad top" style="left: 50%;">🍃</div>
+        <div class="lily-pad top" style="left: 75%;">🍃</div>
+        <div class="lily-pad bottom" style="left: 30%;">🍃</div>
+        <div class="lily-pad bottom" style="left: 60%;">🍃</div>
+        
+        <!-- 动物显示区域 -->
+        <div id="animalDisplay" class="animal-display floating" style="display: none;"></div>
+    </div>
+
+    <div class="buttons-container">
+        <button class="animal-btn" onclick="showAnimal('🐢', 'top', 25)">小乌龟</button>
+        <button class="animal-btn" onclick="showAnimal('🐌', 'top', 55)">蜗牛</button>
+        <button class="animal-btn" onclick="showAnimal('🐜', 'top', 80)">蚂蚁</button>
+        <button class="animal-btn" onclick="showAnimal('🐞', 'top', 30)">瓢虫</button>
+        <button class="animal-btn" onclick="showAnimal('🐟', 'bottom', 35)">小鱼</button>
+        <button class="animal-btn" onclick="showAnimal('🦐', 'bottom', 65)">小虾</button>
+        <button class="animal-btn" onclick="showAnimal('🦆', 'top', 45)">小鸭子</button>
+        <button class="animal-btn" onclick="showAnimal('🦢', 'top', 70)">天鹅</button>
+        <button class="animal-btn" onclick="showAnimal('🦋', 'top', 25)">蝴蝶</button>
+        <button class="animal-btn" onclick="showAnimal('🐝', 'top', 55)">蜜蜂</button>
+        <button class="animal-btn" onclick="showAnimal('🐦', 'top', 80)">小鸟</button>
+        <button class="animal-btn" onclick="showAnimal('🦀', 'bottom', 40)">小螃蟹</button>
+        <button class="animal-btn" onclick="showAnimal('🦞', 'bottom', 70)">小龙虾</button>
+        <button class="animal-btn" onclick="showAnimal('🐸', 'bottom', 30)">小蝌蚪</button>
+        <button class="animal-btn" onclick="showAnimal('🦢', 'top', 60)">小鹅</button>
+        <button class="animal-btn" onclick="showAnimal('🦔', 'top', 40)">小刺猬</button>
+        <button class="animal-btn" onclick="showAnimal('🐿️', 'top', 75)">小松鼠</button>
+        <button class="animal-btn" onclick="showAnimal('🦆', 'top', 35)">小鸳鸯</button>
+        <button class="animal-btn" onclick="showAnimal('🦗', 'top', 65)">小蚂蚱</button>
+        <button class="animal-btn" onclick="showAnimal('🌸', 'top', 50)">荷花</button>
+        <button class="animal-btn" onclick="showAnimal('🌺', 'top', 45)">睡莲</button>
+        <button class="animal-btn" onclick="showAnimal('🐠', 'bottom', 55)">热带鱼</button>
+    </div>
+
+    <script>
+        function showAnimal(emoji, position, leftPercent) {
+            const display = document.getElementById('animalDisplay');
+            display.innerHTML = emoji;
+            display.style.display = 'block';
+            
+            if (position === 'top') {
+                display.style.top = '15%';
+                display.style.bottom = 'auto';
+            } else {
+                display.style.bottom = '15%';
+                display.style.top = 'auto';
+            }
+            
+            display.style.left = leftPercent + '%';
+            display.style.transform = 'translateX(-50%)';
+            
+            // 添加动画效果
+            display.classList.remove('floating');
+            void display.offsetWidth; // 触发重绘
+            display.classList.add('floating');
+        }
+    </script>
+</body>
+</html>
